@@ -1,4 +1,5 @@
 """Data processing for corrupt MNIST dataset."""
+
 import torch
 import typer
 

@@ -1,26 +1,34 @@
 import matplotlib.pyplot as plt
 import torch
 import typer
-from mnist_model.model import MyAwesomeModel
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+
+from mnist_model.model import MyAwesomeModel
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
 
 def visualize(model_checkpoint: str, figure_name: str = "embeddings.png") -> None:
-    """Visualize model predictions. (must input path to a trained model checkpoint)"""
+    """
+    Visualize model predictions. (must input path to a trained model checkpoint)
+        Parameters:
+            model_checkpoint (str): Path to the trained model checkpoint.
+            figure_name (str): Name of the output figure file.
+        Returns:
+            None
+    """
     model: torch.nn.Module = MyAwesomeModel().to(DEVICE)
     model.load_state_dict(torch.load(model_checkpoint))
     model.eval()
-    model.fc = torch.nn.Identity() # check if i should use fc or fc1
+    model.fc = torch.nn.Identity()  # check if i should use fc or fc1
 
     test_images = torch.load("data/processed/test_images.pt")
     test_target = torch.load("data/processed/test_target.pt")
     test_dataset = torch.utils.data.TensorDataset(test_images, test_target)
 
     embeddings, targets = [], []
-    with torch.inference_mode(): # this is like torch.no_grad() but more strict!
+    with torch.inference_mode():  # this is like torch.no_grad() but more strict!
         for batch in torch.utils.data.DataLoader(test_dataset, batch_size=32):
             images, target = batch
             predictions = model(images)
