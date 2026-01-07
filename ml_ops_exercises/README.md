@@ -53,3 +53,10 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
+
+
+To run the scripts we can do it directly from python:
+python ./src/mnist_model/visualize.py models/model.pth ##this script requires an input path
+
+Or using invoke to run the tasks:
+invoke preprocess-data

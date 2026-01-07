@@ -9,7 +9,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.ba
 
 
 def visualize(model_checkpoint: str, figure_name: str = "embeddings.png") -> None:
-    """Visualize model predictions."""
+    """Visualize model predictions. (must input path to a trained model checkpoint)"""
     model: torch.nn.Module = MyAwesomeModel().to(DEVICE)
     model.load_state_dict(torch.load(model_checkpoint))
     model.eval()
@@ -20,7 +20,7 @@ def visualize(model_checkpoint: str, figure_name: str = "embeddings.png") -> Non
     test_dataset = torch.utils.data.TensorDataset(test_images, test_target)
 
     embeddings, targets = [], []
-    with torch.inference_mode():
+    with torch.inference_mode(): # this is like torch.no_grad() but more strict!
         for batch in torch.utils.data.DataLoader(test_dataset, batch_size=32):
             images, target = batch
             predictions = model(images)
